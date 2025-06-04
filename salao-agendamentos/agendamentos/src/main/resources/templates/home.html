@@ -28,7 +28,7 @@
                         <li><a th:href="@{/home}">Home</a></li>
                         <li><a href="#feedback">FeedBack</a></li>
                         <li><a href="#contato">Contato</a></li>
-                        <li><a th:href="@{/agendar}">Agendar</a></li>
+                        <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/agendar}"><button class="btn-gradient">Agendar</button></a></li>
                         <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/agendamentos}">Ver Agendamentos</a></li>
                         <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/api/usuarios/gerenciar}">Gerenciar Contas</a></li>
                         

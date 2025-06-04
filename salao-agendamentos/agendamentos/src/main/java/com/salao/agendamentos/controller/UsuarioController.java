@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes; // Importe RedirectAttributes
 
 @Controller
 @RequestMapping("/api/usuarios")
@@ -26,17 +26,17 @@ public class UsuarioController {
     }
 
     @PostMapping("/cadastro-form")
-    public String cadastrarViaFormulario(@ModelAttribute UsuarioDTO dto, Model model) {
-        dto.setTipo("ADMIN");
+    public String cadastrarViaFormulario(@ModelAttribute UsuarioDTO dto, RedirectAttributes ra) { // Mude Model para RedirectAttributes
+        dto.setTipo("CLIENTE"); // <--- AQUI: Mudei para "CLIENTE"
 
         try {
             usuarioService.cadastrar(dto);
-            return "redirect:/agendamentos";
+            ra.addFlashAttribute("mensagemCadastroSucesso", "Cadastro realizado com sucesso! Faça login para continuar.");
+            return "redirect:/login"; // Redireciona para a página de login
         } catch (RuntimeException e) {
-            model.addAttribute("erro", e.getMessage());
-            return "cadastro";
+            ra.addFlashAttribute("erroCadastro", e.getMessage()); // Adiciona a mensagem de erro
+            return "redirect:/cadastro"; // Redireciona de volta para a página de cadastro
         }
-        
     }
 
     @PostMapping("/login")
@@ -57,8 +57,13 @@ public class UsuarioController {
     }
 
     @PostMapping("/excluir/{id}")
-    public String excluirUsuario(@PathVariable Long id) {
-        usuarioService.excluirPorId(id);
+    public String excluirUsuario(@PathVariable Long id, RedirectAttributes ra) { // Adicione RedirectAttributes
+        try {
+            usuarioService.excluirPorId(id);
+            ra.addFlashAttribute("mensagemExclusao", "Usuário excluído com sucesso.");
+        } catch (Exception e) {
+            ra.addFlashAttribute("erroExclusao", "Erro ao excluir usuário: " + e.getMessage());
+        }
         return "redirect:/api/usuarios/gerenciar";
     }
 

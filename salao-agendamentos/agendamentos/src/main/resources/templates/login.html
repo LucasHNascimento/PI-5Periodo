@@ -22,6 +22,10 @@
             <h1>Iniciar sessão</h1>
         </div>
 
+        <div th:if="${mensagemCadastroSucesso}" style="color: green; font-weight: bold; margin-bottom: 10px;">
+            <p th:text="${mensagemCadastroSucesso}"></p>
+        </div>
+
         <form th:action="@{/login}" method="post" class="dados">
 
             <div class="email">
@@ -56,8 +60,7 @@
         </div>
 
         <div class="voltar-home">
-            <p>Deseja apenas navegar? <a th:href="@{/
-}" class="btn-home">Voltar para Home</a></p>
+            <p>Deseja apenas navegar? <a th:href="@{/}" class="btn-home">Voltar para Home</a></p>
         </div>
     </div>
 

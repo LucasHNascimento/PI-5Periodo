@@ -24,8 +24,8 @@
 
         <div class="dados">
 
-            <div th:if="${erro}" style="color: red; font-weight: bold; margin-bottom: 10px;">
-                <p th:text="${erro}"></p>
+            <div th:if="${erroCadastro}" style="color: red; font-weight: bold; margin-bottom: 10px;">
+                <p th:text="${erroCadastro}"></p>
             </div>
 
             <form th:action="@{/api/usuarios/cadastro-form}" method="post">
