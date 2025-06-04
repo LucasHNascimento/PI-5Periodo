@@ -5,10 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.crypto.password.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder; // Adicione esta importação
+import org.springframework.security.crypto.password.PasswordEncoder; // Adicione esta importação se já não estiver
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 @Configuration
@@ -27,7 +26,7 @@ public class SecurityConfig {
             )
             .formLogin(form -> form
                 .loginPage("/login")
-                .defaultSuccessUrl("/agendamentos", true)
+                .defaultSuccessUrl("/home", true)
                 .permitAll()
             )
             .logout(logout -> logout
@@ -39,10 +38,10 @@ public class SecurityConfig {
         return http.build();
     }
 
-    //usando para teste
+    // Altere este método para usar BCryptPasswordEncoder
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder(); // Retorna uma instância de BCryptPasswordEncoder
     }
 
     @Bean

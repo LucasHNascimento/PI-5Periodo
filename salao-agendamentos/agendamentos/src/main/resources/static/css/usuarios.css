@@ -118,4 +118,33 @@ button:hover {
         font-weight: bold;
         color: #fe9611;
     }
+
+    .voltar-home-container {
+    text-align: center; /* Centraliza o botão */
+    margin-bottom: 20px; /* Adiciona um espaço abaixo do botão */
+    }
+
+    .btn-voltar-home {
+        display: inline-block;
+        padding: 10px 20px;
+        color: white;
+        background-image: linear-gradient(#fe9611, #ff5c00); /* Use o mesmo gradiente dos outros botões */
+        border: none;
+        border-radius: 6px;
+        text-decoration: none; /* Remove o sublinhado do link */
+        font-weight: bold;
+        transition: background-image 0.3s ease;
+    }
+
+    .btn-voltar-home:hover {
+        background-image: linear-gradient(#ff5c00, #fe9611); /* Efeito de hover */
+    }
+
+    /* Ajustes responsivos para o botão se necessário */
+    @media (max-width: 768px) {
+        .btn-voltar-home {
+            padding: 8px 16px;
+            font-size: 16px;
+        }
+    }
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.salao.agendamentos.model.Agendamento;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes; // Importe RedirectAttributes
 
 @Controller
 public class PaginaAgendamentoController {
@@ -24,7 +25,7 @@ public class PaginaAgendamentoController {
                                       @RequestParam String servico,
                                       @RequestParam String dataHora,
                                       @RequestParam String telefone,
-                                      Model model) {
+                                      RedirectAttributes ra) { // Adicione RedirectAttributes aqui
         try {
             AgendamentoDTO dto = new AgendamentoDTO();
             dto.setNomeCliente(nomeCliente);
@@ -33,31 +34,30 @@ public class PaginaAgendamentoController {
             dto.setDataHora(java.time.LocalDateTime.parse(dataHora));
 
             service.agendar(dto);
-            model.addAttribute("mensagem", "Agendamento realizado com sucesso!");
-
+            ra.addFlashAttribute("mensagem", "Agendamento realizado com sucesso!"); // Adiciona a mensagem flash
         } catch (Exception e) {
-            model.addAttribute("mensagem", "Erro: " + e.getMessage());
+            ra.addFlashAttribute("erro", "Erro: " + e.getMessage()); // Adiciona mensagem de erro flash
         }
 
-        return "lista-agendamentos";
+        return "redirect:/agendamentos"; // Redireciona para a lista de agendamentos
     }
 
     @GetMapping("/agendamentos")
     public String listarAgendamentos(Model model) {
         model.addAttribute("agendamentos", service.listarTodos());
+        // Mensagens flash serão automaticamente adicionadas ao Model aqui se existirem
         return "lista-agendamentos";
     }
 
     @DeleteMapping("/cancelar/{id}")
-    public String cancelarAgendamento(@PathVariable Long id, Model model) {
+    public String cancelarAgendamento(@PathVariable Long id, RedirectAttributes ra) { // Use RedirectAttributes
         try {
             service.cancelar(id);
-            model.addAttribute("mensagem", "Agendamento cancelado com sucesso.");
+            ra.addFlashAttribute("mensagem", "Agendamento cancelado com sucesso."); // Mensagem flash
         } catch (Exception e) {
-            model.addAttribute("mensagem", "Erro ao cancelar: " + e.getMessage());
+            ra.addFlashAttribute("erro", "Erro ao cancelar: " + e.getMessage()); // Mensagem de erro flash
         }
-        model.addAttribute("agendamentos", service.listarTodos());
-        return "lista-agendamentos";
+        return "redirect:/agendamentos"; // Redireciona para a lista
     }
 
     @GetMapping("/editar/{id}")
@@ -68,10 +68,9 @@ public class PaginaAgendamentoController {
     }
 
     @PostMapping("/editar/{id}")
-    public String salvarEdicao(@PathVariable Long id, @ModelAttribute Agendamento agendamentoEditado, Model model) {
+    public String salvarEdicao(@PathVariable Long id, @ModelAttribute Agendamento agendamentoEditado, RedirectAttributes ra) { // Use RedirectAttributes
         service.atualizar(id, agendamentoEditado);
-        model.addAttribute("mensagem", "Agendamento atualizado com sucesso!");
-        model.addAttribute("agendamentos", service.listarTodos());
-        return "lista-agendamentos";
+        ra.addFlashAttribute("mensagem", "Agendamento atualizado com sucesso!"); // Mensagem flash
+        return "redirect:/agendamentos"; // Redireciona para a lista
     }
 }

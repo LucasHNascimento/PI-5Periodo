@@ -3,9 +3,24 @@
 <head>
     <title>Lista de Agendamentos</title>
     <meta charset="UTF-8" />
+    <style>
+        .mensagem-sucesso {
+            color: green;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .mensagem-erro {
+            color: red;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
     <h1>Agendamentos Marcados</h1>
+
+    <p th:if="${mensagem}" class="mensagem-sucesso" th:text="${mensagem}"></p>
+    <p th:if="${erro}" class="mensagem-erro" th:text="${erro}"></p>
 
     <table border="1">
         <tr>
@@ -14,8 +29,7 @@
             <th>Serviço</th>
             <th>Data e Hora</th>
             <th>Telefone</th>
-            <th>Ação</th>
-        </tr>
+            <th colspan="2">Ação</th> </tr>
         <tr th:each="agendamento : ${agendamentos}">
             <td th:text="${agendamento.id}"></td>
             <td th:text="${agendamento.nomeCliente}"></td>
@@ -24,9 +38,9 @@
             <td th:text="${agendamento.telefone}"></td>
             <td>
                 <form th:action="@{'/cancelar/' + ${agendamento.id}}" method="post">
-                <input type="hidden" name="_method" value="delete" />
-                <button type="submit">Cancelar</button>
-            </form>
+                    <input type="hidden" name="_method" value="delete" />
+                    <button type="submit">Cancelar</button>
+                </form>
             </td>
             <td>
                 <form th:action="@{'/editar/' + ${agendamento.id}}" method="get">
@@ -37,16 +51,13 @@
     </table>
     
     <br>
-        <form th:action="@{/agendar}" method="get">
-            <button type="submit">Agendar</button>
-       </form>
+    <form th:action="@{/agendar}" method="get">
+        <button type="submit">Agendar Novo</button>
+    </form>
 
     <br>
-        <form th:action="@{/logout}" method="post">
-            <button type="submit">Sair</button>
-        </form>
-
-    <br>
-    <p th:text="${mensagem}"></p>
+    <form th:action="@{/home}" method="get">
+        <button type="submit">Sair</button>
+    </form>
 </body>
 </html>
